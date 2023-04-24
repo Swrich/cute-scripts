@@ -54,7 +54,7 @@ const login = () => {
   $.log('开始登录~~~~', JSON.stringify(requset))
   return new Promise((resolve) => {
     $.post(requset, (error, response, data) => {
-      $.log('LOGIN', response);
+      $.log('LOGIN', JSON.stringify(response));
       resolve();
     });
   });
@@ -71,7 +71,7 @@ const getDomainPage = () => {
     };
     return new Promise((resolve) => {
       $.post(requset, (error, response, data) => {
-        $.log('DOMAIN', response);
+        $.log('DOMAIN', JSON.stringify(response));
         $.log(JSON.stringify(response.body).match(DOMAIN_INFO_REGEX))
         $.log(JSON.stringify(response.body).match(NO_DOMAIN_REGEX))
         resolve();

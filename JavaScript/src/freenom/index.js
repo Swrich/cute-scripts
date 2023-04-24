@@ -60,16 +60,23 @@ const getUserInfo = () => {
   }
   if ($response) {
     $.log('freenom response userinfo 😱😱😱:', JSON.stringify($response));
-    // const setCookieStr = $response.headers['set-cookie'];
-    const headerStr = JSON.stringify($response.headers)
-    const cookieRegex = /set-cookie:\s*([^\n]+)\n?/gi;
-    const cookie = headerStr.match(cookieRegex).join('').replace(/;\s+/g, ';');
+    const setCookieStr = $response.headers['set-cookie'];
+
+    const regex1 = /WHMCSZH5eHTGhfvzP=[^;,]+/g;
+    const regex2 = /WHMCSUser=[^;,]+/g;
+
+    const matches1 = setCookieStr.match(regex1);
+    const matches2 = setCookieStr.match(regex2);
+
+    // console.log(matches1); // ['WHMCSZH5eHTGhfvzP=xxx']
+    // console.log(matches2); // ['WHMCSUser=xxx']
+
     // const cookie = `${getCookieStrBykey('WHMCSZH5eHTGhfvzP', setCookieStr)};${getCookieStrBykey(
     //   'WHMCSUser',
     //   setCookieStr
     // )}`;
     const currentCookie = $.getdata(cookieName);
-    $.setdata(cookieName, `${currentCookie};${cookie}`);
+    $.setdata(cookieName, `${currentCookie};${matches1[0]};${matches2[0]}`);
   }
 };
 

@@ -1,10 +1,12 @@
 import Env from '../../utils/Env';
 const $ = new Env('Freenom.com');
 const cookieName = 'swrich_freenomcookie';
+const bodyName = 'swrich_freenombody';
 const username = 'swrich_freenomusername';
 const password = 'swrich_freenompassword';
 
 const APP_COOKIE = $.getdata(cookieName);
+const APP_BODY = $.getdata(bodyName);
 
 // FreeNom登录地址
 const LOGIN_URL = 'https://my.freenom.com/dologin.php';
@@ -43,20 +45,44 @@ const login = () => {
     Referer: 'https://my.freenom.com/clientarea.php',
     Cookie: APP_COOKIE,
   };
-  const body = ``;
+  const body = APP_BODY;
   const requset = {
     url: LOGIN_URL,
-    headers,
+    headers: Object.assign({}, headers, HEADERS),
     body,
   };
-  $.post(requset);
+  return new Promise((resolve) => {
+    $.post(requset, (error, response, data) => {
+      $.log('LOGIN', response);
+      resolve();
+    });
+  });
 };
+
+const getDomainPage = () => {
+    const headers = {
+      Referer: 'https://my.freenom.com/clientarea.php',
+      Cookie: APP_COOKIE,
+    };
+    const requset = {
+      url: DOMAIN_STATUS_URL,
+      headers: Object.assign({}, headers, HEADERS),
+    };
+    return new Promise((resolve) => {
+      $.post(requset, (error, response, data) => {
+        $.log('DOMAIN', response);
+        $.log(JSON.stringify(response.body).match(DOMAIN_INFO_REGEX))
+        $.log(JSON.stringify(response.body).match(NO_DOMAIN_REGEX))
+        resolve();
+      });
+    });
+  };
 
 const getUserInfo = () => {
   if ($request && $request.method != 'OPTIONS' && $request.url.match(/dologin.php/)) {
     $.log('freenom request userinfo 😱😱😱:', JSON.stringify($request));
-    const cookie = $request.headers['cookie'];
-    $.setdata(cookieName, cookie);
+    $.setdata(cookieName, $request.headers['cookie']);
+    $.setdata(bodyName, $request.body);
   }
   if ($response) {
     $.log('freenom response userinfo 😱😱😱:', JSON.stringify($response));
@@ -67,32 +93,10 @@ const getUserInfo = () => {
 
     const matches1 = setCookieStr.match(regex1);
     const matches2 = setCookieStr.match(regex2);
-
-    // console.log(matches1); // ['WHMCSZH5eHTGhfvzP=xxx']
-    // console.log(matches2); // ['WHMCSUser=xxx']
-
-    // const cookie = `${getCookieStrBykey('WHMCSZH5eHTGhfvzP', setCookieStr)};${getCookieStrBykey(
-    //   'WHMCSUser',
-    //   setCookieStr
-    // )}`;
     const currentCookie = $.getdata(cookieName);
     $.setdata(cookieName, `${currentCookie};${matches1[0]};${matches2[0]}`);
   }
 };
-
-function getCookieStrBykey(targetCookieName, cookieString) {
-  if (!targetCookieName || !cookieString) return '';
-  const cookieRegex = /(?<=^|;\s*)(\w+)=([^;]+)/g;
-  try {
-    const targetCookie = cookieString.match(cookieRegex).find((cookie) => {
-      const [name] = cookie.split('=');
-      return name === targetCookieName;
-    });
-    return targetCookie;
-  } catch (error) {
-    $.log(error);
-  }
-}
 
 !(async () => {
   if (typeof $request != 'undefined' || typeof $response != 'undefined') {
@@ -100,6 +104,7 @@ function getCookieStrBykey(targetCookieName, cookieString) {
     $.log('已保存用户信息', $.getdata(cookieName));
     return;
   }
+  await login();
 })()
   .catch((e) => {
     $.log('', `❌失败! 原因: ${e}!`, '');

@@ -67,7 +67,7 @@ const getUserInfo = () => {
   }
 };
 
-const getCookieStrBykey = (targetCookieName, cookieString) => {
+function getCookieStrBykey (targetCookieName, cookieString) {
   if (!targetCookieName || !cookieString) return '';
   const cookieRegex = /(?<=^|;\s*)(\w+)=([^;]+)/g;
   const targetCookie = cookieString.match(cookieRegex).find((cookie) => {

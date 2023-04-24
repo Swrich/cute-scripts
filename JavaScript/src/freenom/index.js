@@ -51,13 +51,17 @@ const login = () => {
 
 const getUserInfo = () => {
   if ($request && $request.method != 'OPTIONS' && $request.url.match(/dologin.php/)) {
-    $.log('freenom userinfo 😄😄😄:', $request);
-    $.log('freenom userinfo 😱😱😱:', JSON.stringify($request));
+    $.log('freenom request userinfo 😄😄😄:', $request);
+    $.log('freenom request userinfo 😱😱😱:', JSON.stringify($request));
+  }
+  if ($response) {
+    $.log('freenom response userinfo 😄😄😄:', $response);
+    $.log('freenom response userinfo 😱😱😱:', JSON.stringify($response));
   }
 }
 
 !(async () => {
-  if (typeof $request != 'undefined') {
+  if (typeof $request != 'undefined' || typeof $response != 'undefined') {
     getUserInfo();
     return;
   }

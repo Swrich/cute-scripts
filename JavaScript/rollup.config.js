@@ -27,7 +27,7 @@ const rollupConfigs = inputFiles.map((inputFile) => {
   const outputDir = path.join(distDir, path.dirname(path.relative(srcDir, inputFile)));
   const outputFileName = path.basename(inputFile, '.js');
   const parentDirName = path.basename(path.dirname(inputFile));
-  const outputFilePath = path.join(outputDir, `${outputFileName}.${Date.now()}.js`);
+  const outputFilePath = path.join(outputDir, `${outputFileName}.min.js`);
 
   return {
     input: inputFile,

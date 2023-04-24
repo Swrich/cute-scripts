@@ -11,8 +11,8 @@
 阿里云盘每日签到 = type=cron,cronexp=0 9 * * *,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/freenom/index.min.js
 阿里云盘获取COOKIE = type=http-request,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/freenom/index.min.js,pattern=^https?:\/\/auth\.aliyundrive\.com\/v2\/account\/token
 
-GLaDOS每日签到 = type=cron,cronexp=2 9 * * *,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/GLaDOS/index.1682349355871.js
-GLaDOS获取COOKIE = type=http-request,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/GLaDOS/index.1682349355871.js,pattern=^https?:\/\/glados\.rocks\/api\/user\/checkin
+GLaDOS每日签到 = type=cron,cronexp=2 9 * * *,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/GLaDOS/index.min.js
+GLaDOS获取COOKIE = type=http-request,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/GLaDOS/index.min.js,pattern=^https?:\/\/glados\.rocks\/api\/user\/checkin
 
 Freenom域名续费 = type=cron,cronexp=4 9 * * *,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/freenom/index.min.js
 Freenom获取用户信息 = type=http-request,script-path=https://raw.githubusercontent.com/Swrich/cute-scripts/dev-surge/JavaScript/dist/freenom/index.min.js,pattern=^https?:\/\/my\.freenom\.com\/dologin\.php,requires-body=1

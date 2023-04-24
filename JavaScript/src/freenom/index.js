@@ -41,7 +41,7 @@ const login = () => {
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     Referer: 'https://my.freenom.com/clientarea.php',
-    'Cookie': APP_COOKIE
+    Cookie: APP_COOKIE,
   };
   const body = ``;
   const requset = {
@@ -60,22 +60,32 @@ const getUserInfo = () => {
   }
   if ($response) {
     $.log('freenom response userinfo 😱😱😱:', JSON.stringify($response));
-    const setCookieStr = $response.headers['set-cookie'];
-    const cookie = `${getCookieStrBykey('WHMCSZH5eHTGhfvzP', setCookieStr)};${getCookieStrBykey('WHMCSUser', setCookieStr)}`;
+    // const setCookieStr = $response.headers['set-cookie'];
+    const headerStr = JSON.stringify($response.headers)
+    const cookieRegex = /set-cookie:\s*([^\n]+)\n?/gi;
+    const cookie = headerStr.match(cookieRegex).join('').replace(/;\s+/g, ';');
+    // const cookie = `${getCookieStrBykey('WHMCSZH5eHTGhfvzP', setCookieStr)};${getCookieStrBykey(
+    //   'WHMCSUser',
+    //   setCookieStr
+    // )}`;
     const currentCookie = $.getdata(cookieName);
     $.setdata(cookieName, `${currentCookie};${cookie}`);
   }
 };
 
-function getCookieStrBykey (targetCookieName, cookieString) {
+function getCookieStrBykey(targetCookieName, cookieString) {
   if (!targetCookieName || !cookieString) return '';
   const cookieRegex = /(?<=^|;\s*)(\w+)=([^;]+)/g;
-  const targetCookie = cookieString.match(cookieRegex).find((cookie) => {
-    const [name] = cookie.split('=');
-    return name === targetCookieName;
-  });
-  return targetCookie;
-};
+  try {
+    const targetCookie = cookieString.match(cookieRegex).find((cookie) => {
+      const [name] = cookie.split('=');
+      return name === targetCookieName;
+    });
+    return targetCookie;
+  } catch (error) {
+    $.log(error);
+  }
+}
 
 !(async () => {
   if (typeof $request != 'undefined' || typeof $response != 'undefined') {

@@ -30,39 +30,57 @@ const NO_DOMAIN_REGEX = '/<trsclass="carttablerow"><tdscolspan="5">(?P<msg>[^<]+
 
 // 公用请求头
 const HEADERS = {
-  'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-  'Accept-Encoding' : 'gzip, deflate, br',
-  'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
-}
+  Accept:
+    'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+};
 
 const login = () => {
   const headers = {
-    'Content-Type' : 'application/x-www-form-urlencoded',
-    'Referer' : 'https://my.freenom.com/clientarea.php'
-  }
+    'Content-Type': 'application/x-www-form-urlencoded',
+    Referer: 'https://my.freenom.com/clientarea.php',
+    'Cookie': APP_COOKIE
+  };
   const body = ``;
-    const requset = {
-      url: LOGIN_URL,
-      headers,
-      body
-    }
-    $.post(requset)
-}
+  const requset = {
+    url: LOGIN_URL,
+    headers,
+    body,
+  };
+  $.post(requset);
+};
 
 const getUserInfo = () => {
   if ($request && $request.method != 'OPTIONS' && $request.url.match(/dologin.php/)) {
-    $.log('freenom request userinfo 😄😄😄:', $request);
     $.log('freenom request userinfo 😱😱😱:', JSON.stringify($request));
+    const cookie = $request.headers['cookie'];
+    $.setdata(cookieName, cookie);
   }
   if ($response) {
-    $.log('freenom response userinfo 😄😄😄:', $response);
     $.log('freenom response userinfo 😱😱😱:', JSON.stringify($response));
+    const setCookieStr = $response.headers['set-cookie'];
+    const cookie = `${getCookieStrBykey('WHMCSZH5eHTGhfvzP', setCookieStr)};${getCookieStrBykey('WHMCSUser', setCookieStr)}`;
+    const currentCookie = $.getdata(cookieName);
+    $.setdata(cookieName, `${currentCookie};${cookie}`);
   }
-}
+};
+
+const getCookieStrBykey = (targetCookieName, cookieString) => {
+  if (!targetCookieName || !cookieString) return '';
+  const cookieRegex = /(?<=^|;\s*)(\w+)=([^;]+)/g;
+  const targetCookie = cookieString.match(cookieRegex).find((cookie) => {
+    const [name] = cookie.split('=');
+    return name === targetCookieName;
+  });
+  return targetCookie;
+};
 
 !(async () => {
   if (typeof $request != 'undefined' || typeof $response != 'undefined') {
     getUserInfo();
+    $.log('已保存用户信息', $.getdata(cookieName));
     return;
   }
 })()
@@ -72,4 +90,3 @@ const getUserInfo = () => {
   .finally(() => {
     $.done();
   });
-

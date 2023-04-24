@@ -1,6 +1,8 @@
 import Env from '../../utils/Env';
 const $ = new Env('Freenom.com');
 const cookieName = 'swrich_freenomcookie';
+const username = 'swrich_freenomusername';
+const password = 'swrich_freenompassword';
 
 const APP_COOKIE = $.getdata(cookieName);
 
@@ -26,21 +28,39 @@ const LOGIN_STATUS_REGEX = '/<li.*?Logout.*?</li>/i';
 // 匹配无域名的正则
 const NO_DOMAIN_REGEX = '/<trsclass="carttablerow"><tdscolspan="5">(?P<msg>[^<]+)</td></tr>/i';
 
+// 公用请求头
+const HEADERS = {
+  'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'Accept-Encoding' : 'gzip, deflate, br',
+  'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+}
 
-const getCookieAndUserInfo = () => {
+const login = () => {
+  const headers = {
+    'Content-Type' : 'application/x-www-form-urlencoded',
+    'Referer' : 'https://my.freenom.com/clientarea.php'
+  }
+  const body = ``;
     const requset = {
-
+      url: LOGIN_URL,
+      headers,
+      body
     }
     $.post(requset)
 }
 
+const getUserInfo = () => {
+  if ($request && $request.method != 'OPTIONS' && $request.url.match(/dologin.php/)) {
+    $.log('freenom userinfo 😄😄😄:', $request);
+    $.log('freenom userinfo 😱😱😱:', JSON.stringify($request));
+  }
+}
+
 !(async () => {
   if (typeof $request != 'undefined') {
-    getCookie();
+    getUserInfo();
     return;
   }
-  // await signin();
-  await status();
 })()
   .catch((e) => {
     $.log('', `❌失败! 原因: ${e}!`, '');
@@ -49,50 +69,3 @@ const getCookieAndUserInfo = () => {
     $.done();
   });
 
-function signin() {
-  return new Promise((resolve) => {
-    const header = {
-      Accept: `application/json, text/plain, */*`,
-      Origin: `https://glados.rocks`,
-      'Accept-Encoding': `gzip, deflate, br`,
-      Cookie: sicookie,
-      'Content-Type': `application/json;charset=utf-8`,
-      Host: `glados.rocks`,
-      Connection: `keep-alive`,
-      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1`,
-      Authorization: siauthorization,
-      'Accept-Language': `zh-cn`,
-    };
-    const body = `{ "token": "glados.network" }`;
-    const signinRequest = {
-      url: 'https://glados.rocks/api/user/checkin',
-      headers: header,
-      body: body,
-    };
-    $.post(signinRequest, (error, response, data) => {
-      $.log(error, response, data);
-    });
-  });
-}
-
-function status() {
-  return new Promise((resolve) => {
-    const statusRequest = {
-      url: 'https://my.freenom.com/domains.php?a=renewals',
-      headers: JSON.parse(siauthorization),
-    };
-    $.get(statusRequest, (error, response, data) => {
-      $.log('Freenom renew response😈😈😈', JSON.stringify(response));
-      resolve();
-    });
-  });
-}
-
-function getCookie() {
-  if ($request && $request.headers) {
-    console.log($request.headers);
-    const headers = JSON.stringify($request.headers);
-    $.setdata(headers, signauthorization);
-    $.msg('Freenom', '', '获取Cookie成功🎉');
-  }
-}

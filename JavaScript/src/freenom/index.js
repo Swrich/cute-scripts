@@ -51,6 +51,7 @@ const login = () => {
     headers: Object.assign({}, headers, HEADERS),
     body,
   };
+  $.log('开始登录~~~~', JSON.stringify(requset))
   return new Promise((resolve) => {
     $.post(requset, (error, response, data) => {
       $.log('LOGIN', response);

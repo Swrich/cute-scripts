@@ -71,7 +71,7 @@ const getDomainPage = () => {
     };
     return new Promise((resolve) => {
       $.post(requset, (error, response, data) => {
-        $.log('DOMAIN', JSON.stringify(response));
+        $.log('DOMAIN!!!!!!!!!!', JSON.stringify(response));
         $.log(JSON.stringify(response.body).match(DOMAIN_INFO_REGEX))
         $.log(JSON.stringify(response.body).match(NO_DOMAIN_REGEX))
         resolve();
@@ -106,6 +106,7 @@ const getUserInfo = () => {
     return;
   }
   await login();
+  await getDomainPage();
 })()
   .catch((e) => {
     $.log('', `❌失败! 原因: ${e}!`, '');

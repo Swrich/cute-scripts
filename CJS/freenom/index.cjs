@@ -18,7 +18,7 @@ const DOMAIN_INFO_URL = 'https://my.freenom.com/domains.php?a=renewals';
 
 function login() {
   const formData = new FormData();
-  formData.append('username', '');
+  formData.append('username', 'fwnevercry@gmail.com');
   formData.append('password', '');
   client
     .request({
@@ -31,9 +31,8 @@ function login() {
       data: formData,
     })
     .then(({ config }) => {
-      console.log(config.jar.toJSON());
-      console.log(jar);
-      //   getDomainInfo()
+      // console.log(config.jar.toJSON());
+        getDomainInfo()
     });
 }
 login()
@@ -48,8 +47,11 @@ function getDomainInfo() {
       }
     })
     .then(({ config, data }) => {
-      console.log(config.jar.toJSON());
-      console.log(data);
+      // console.log(config.jar.toJSON());
+      const domain = data.match(/(?<=<td>)[a-zA-Z0-9]+\.[a-z]{2,3}/)[0];
+      const status = data.match(/(?<=<td>)Active/)[0];
+      const days = data.match(/(?<=<td>\s*<span class="textgreen">)\d+ Days/)[0]
+      console.log(`${domain} : ${status} : ${days}`);
     });
 }
 

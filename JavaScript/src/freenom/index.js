@@ -51,7 +51,7 @@ const login = () => {
     headers: Object.assign({}, headers, HEADERS),
     body,
   };
-  $.log('开始登录~~~~', JSON.stringify(requset))
+  $.log('开始登录~~~~', JSON.stringify(requset));
   return new Promise((resolve) => {
     $.post(requset, (error, response, data) => {
       $.log('LOGIN', JSON.stringify(response));
@@ -61,23 +61,23 @@ const login = () => {
 };
 
 const getDomainPage = () => {
-    const headers = {
-      Referer: 'https://my.freenom.com/clientarea.php',
-      Cookie: APP_COOKIE,
-    };
-    const requset = {
-      url: DOMAIN_STATUS_URL,
-      headers: Object.assign({}, headers, HEADERS),
-    };
-    return new Promise((resolve) => {
-      $.post(requset, (error, response, data) => {
-        $.log('DOMAIN!!!!!!!!!!', JSON.stringify(response));
-        $.log(JSON.stringify(response.body).match(DOMAIN_INFO_REGEX))
-        $.log(JSON.stringify(response.body).match(NO_DOMAIN_REGEX))
-        resolve();
-      });
-    });
+  const headers = {
+    Referer: 'https://my.freenom.com/clientarea.php',
+    Cookie: APP_COOKIE,
   };
+  const requset = {
+    url: DOMAIN_STATUS_URL,
+    headers: Object.assign({}, headers, HEADERS),
+  };
+  return new Promise((resolve) => {
+    $.post(requset, (error, response, data) => {
+      $.log('DOMAIN!!!!!!!!!!', JSON.stringify(response));
+      $.log(JSON.stringify(response.body).match(DOMAIN_INFO_REGEX));
+      $.log(JSON.stringify(response.body).match(NO_DOMAIN_REGEX));
+      resolve();
+    });
+  });
+};
 
 const getUserInfo = () => {
   if ($request && $request.method != 'OPTIONS' && $request.url.match(/dologin.php/)) {

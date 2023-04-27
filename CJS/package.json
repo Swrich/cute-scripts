@@ -11,7 +11,7 @@
     "stop": "pm2 stop freenom-node",
     "restart": "pm2 restart freenom-node",
     "logs": "pm2 logs freenom-node",
-    "once": "node ./src/freenom/index.cjs"
+    "once": "node ./src/freenom/index.cjs >> log 2>&1"
   },
   "keywords": [],
   "author": "",

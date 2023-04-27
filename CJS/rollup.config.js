@@ -7,7 +7,7 @@ import del from 'rollup-plugin-delete';
 import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
 
-const srcDir = './freenom';
+const srcDir = './src';
 const distDir = './dist';
 
 // 获取src目录下的所有文件路径

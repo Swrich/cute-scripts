@@ -24,3 +24,8 @@ bower_components/
 .npm/
 .DS_Store
 Thumbs.db
+
+# 忽略日志文件
+*/**/*.log
+*/**/*log*.txt
+*/**/log

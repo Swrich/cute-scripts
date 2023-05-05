@@ -132,7 +132,7 @@ class Freenom {
     const title = `<<<<< Error Info >>>>>\n`;
     const end = `\n <<<<< Error Info End At ${this.getCurrentTime()} >>>>>\n`;
     console.error('\x1b[1m\x1b[31m%s\x1b[0m', `${title}${str}${end}`);
-    this.notify('Error', `${title}${str}${end}`)
+    this.notify('Error', str)
   }
   Succeedog(str) {
     const title = `<<<<< Succeed Info >>>>>\n`;

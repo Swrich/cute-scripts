@@ -1,6 +1,7 @@
 [
   {
-    "cron": "* 0,10 * * *",
-    "script": "freenom.sh"
+    "cron": "* 0,10,12 * * *",
+    "script": "freenom.sh",
+    "immdiate": true
   }
 ]

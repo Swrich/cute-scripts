@@ -8,10 +8,26 @@ const taskList = [];
 // 读取配置文件
 const config = JSON.parse(fs.readFileSync('scripts.json', 'utf8'));
 
+const execTask = (filename) => {
+  console.log(`Running script ${filename}...`);
+  // 使用child_process模块执行脚本
+  exec(`./shell/${filename}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
+};
+
 // 循环遍历配置文件中的脚本和cron表达式
-config.forEach(({ cron: cronExpression, script: scriptPath }) => {
+config.forEach(({ cron: cronExpression, script: scriptPath, immdiate }) => {
   const taskName = `!!${scriptPath}!!`;
 
+  if (immdiate) {
+    execTask(scriptPath)
+  }
   if (checkLock(taskName)) {
     // 如果有同一任务在执行，则不再执行
     console.log(`${taskName} is running, skip this time.`);
@@ -25,17 +41,8 @@ config.forEach(({ cron: cronExpression, script: scriptPath }) => {
   setLock(taskName);
   // 使用cron模块定时执行脚本
   cron.schedule(cronExpression, () => {
-    console.log(`Running script ${scriptPath}...`);
-    // 使用child_process模块执行脚本
-    exec(`./shell/${scriptPath}`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
-      // 清除锁
-      clearLock(taskName);
-    });
+    execTask(scriptPath);
+    // 清除锁
+    clearLock(taskName);
   });
 });

@@ -9,4 +9,4 @@ MINUTES=$(( ( RANDOM % 10 )  + 1 ))
 #sleep ${MINUTES}m
 
 # Restart the NODE process
-node ./src/freenom/index.cjs >> freenom_log 2>&1
+node ../src/freenom/index.cjs >> freenom_log 2>&1

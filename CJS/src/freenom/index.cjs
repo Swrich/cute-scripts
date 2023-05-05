@@ -14,7 +14,7 @@ class Freenom {
   static HEADERS = {
     'Content-Type': 'application/x-www-form-urlencoded',
     Accept:
-      'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
     'Accept-Encoding': 'gzip, deflate, br',
     'User-Agent': Freenom.getChromeVersionUserAgent(),
   };
@@ -44,10 +44,10 @@ class Freenom {
 
       if (cookieConfig && cookieConfig.cookies && cookieConfig.cookies.length > 0) {
         if (cookieConfig.cookies.some(({ key, value }) => key === 'WHMCSZH5eHTGhfvzP' && value)) {
-          this.Succeedog('Login Succeed! ^_^');
+          this.Succeedog('Get login cookie succeed! ^_^');
           return true;
         } else {
-          throw new Error('Login Failed QAQ');
+          throw new Error('Get login cookie failed QAQ');
         }
       }
     } catch (error) {
@@ -58,7 +58,7 @@ class Freenom {
 
   async getDomainInfoHtml() {
     try {
-      const { data } = await client.request({
+      const { data, config } = await client.request({
         url: Freenom.DOMAIN_INFO_URL,
         method: 'GET',
         headers: {
@@ -85,7 +85,7 @@ class Freenom {
       this.Succeedog(text);
       return { domain, status, days, text };
     } catch (error) {
-      this.Errorog('An error occurred while parsing the HTML, Please confirm that your account information is correct');
+      this.Errorog(error);
       return false;
     }
   }
@@ -99,7 +99,7 @@ class Freenom {
       await axios.get(`${this.bark}/${title}/${content}`);
       this.Succeedog('Send message successful');
     } catch (error) {
-      this.Errorog('An error occurred during notification');
+      this.Errorog(error);
     }
   }
 

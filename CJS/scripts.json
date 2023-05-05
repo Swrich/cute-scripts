@@ -1,0 +1,6 @@
+[
+  {
+    "cron": "50 15 * * *",
+    "script": "freenom.sh"
+  }
+]

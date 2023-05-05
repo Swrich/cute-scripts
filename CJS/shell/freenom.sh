@@ -6,7 +6,7 @@ echo "Current Path:" $dir
 MINUTES=$(( ( RANDOM % 10 )  + 1 ))
 
 # Wait for the random number of minutes
-sleep ${MINUTES}m
+#sleep ${MINUTES}m
 
-# Restart the PM2 process
-pnpm once
+# Restart the NODE process
+node ./src/freenom/index.cjs >> freenom_log 2>&1

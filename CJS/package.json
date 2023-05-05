@@ -7,11 +7,11 @@
   "main": "app.cjs",
   "scripts": {
     "build": "rollup -c",
-    "start": "pm2 start ./src/freenom/index.cjs --name freenom-node",
-    "stop": "pm2 stop freenom-node",
-    "restart": "pm2 restart freenom-node",
-    "logs": "pm2 logs freenom-node",
-    "once": "node ./src/freenom/index.cjs >> log 2>&1"
+    "start": "pm2 start app.cjs --name CJS/app.js",
+    "stop": "pm2 stop CJS/app.js",
+    "restart": "pm2 restart CJS/app.js",
+    "logs": "pm2 logs CJS/app.js",
+    "delete": "pm2 delete CJS/app.js"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,8 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.1",
+    "node-cron": "^3.0.2",
+    "pm2": "^5.3.0",
     "rollup": "^3.21.0",
     "rollup-plugin-delete": "^2.0.0"
   }

@@ -76,7 +76,7 @@ class Freenom {
   parseDomainHtml(htmlStr) {
     try {
       if (!htmlStr || (htmlStr && !/<a[^>]+>Logout<\/a>/i.test(htmlStr))) {
-        throw new Error('Login information not found!');
+        throw new Error(`Login information not found! \n Current username : ${this.username}`);
       }
       const domain = htmlStr.match(/(?<=<td>)[a-zA-Z0-9]+\.[a-z]{2,3}/)[0];
       const status = htmlStr.match(/(?<=<td>)Active/)[0];
@@ -99,7 +99,7 @@ class Freenom {
       await axios.get(`${this.bark}/${title}/${content}`);
       this.Succeedog('Send message successful');
     } catch (error) {
-      this.Errorog(error);
+      console.error(error);
     }
   }
 
@@ -132,6 +132,7 @@ class Freenom {
     const title = `<<<<< Error Info >>>>>\n`;
     const end = `\n <<<<< Error Info End At ${this.getCurrentTime()} >>>>>\n`;
     console.error('\x1b[1m\x1b[31m%s\x1b[0m', `${title}${str}${end}`);
+    this.notify(`${title}${str}${end}`)
   }
   Succeedog(str) {
     const title = `<<<<< Succeed Info >>>>>\n`;

@@ -11,7 +11,7 @@ const config = JSON.parse(fs.readFileSync('scripts.json', 'utf8'));
 const execTask = (filename) => {
   console.log(`Running script ${filename}...`);
   // 使用child_process模块执行脚本
-  exec(`./shell/${filename}`, (error, stdout, stderr) => {
+  exec(`bash ./shell/${filename}`, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return;
@@ -33,10 +33,6 @@ config.forEach(({ cron: cronExpression, script: scriptPath, immdiate }) => {
     console.log(`${taskName} is running, skip this time.`);
     return;
   }
-
-  // 设置锁，避免重复执行任务
-  setLock(taskName);
-
   // 设置锁，避免重复执行任务
   setLock(taskName);
   // 使用cron模块定时执行脚本

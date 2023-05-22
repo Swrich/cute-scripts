@@ -7,7 +7,7 @@
   "main": "app.cjs",
   "scripts": {
     "build": "rollup -c",
-    "start": "pm2 start app.cjs --name CJS/app.js",
+    "start": "pm2 start app.cjs --name CJS/app.js --cron-restart=\"0 0 9 * * ?\"",
     "stop": "pm2 stop CJS/app.js",
     "restart": "pm2 restart CJS/app.js",
     "logs": "pm2 logs CJS/app.js",
